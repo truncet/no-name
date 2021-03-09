@@ -1,0 +1,11 @@
+__pycache__/*
+*.pyc
+venv/*
+setup.sh
+tmp/*
+junk/*
+.DS_Store
+*~
+*#
+.vscode/*
+.idea/*
