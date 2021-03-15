@@ -1,5 +1,5 @@
 from  flask import render_template, Blueprint, request, jsonify
-from .state_machines import token_required, register_user, login_user
+from .state_machines import token_required, register_user, login_user, register_booking
 import json
 
 
@@ -9,14 +9,26 @@ users = Blueprint('users', __name__)
 
 @users.route('/user', methods=['GET'])
 @token_required
-def get_users(current_user):
+def get_current_user_info(current_user):
+    return jsonify({'message':current_user.username + " is logged in"}), 200
+    
+
+
+
+@users.route('/book', methods=['GET'])
+@token_required
+def get_current_booking(current_user):
     return ''
 
 
-@users.route('/user', methods=['POST'])
+@users.route('/book', methods=['POST'])
 @token_required
-def create_user():
-    return '' 
+def new_booking(current_user):
+    
+    res, code = register_booking(current_user, request)
+    return ''
+
+
 
 
 @users.route('/register', methods=['POST'])

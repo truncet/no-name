@@ -4,7 +4,7 @@ import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from flask import jsonify, request
-from models import User, db
+from models import User, Spell,BookingDetails, db
 from libs.utils import generate_uuid
 from platform_service import helpers
 
@@ -19,13 +19,12 @@ def token_required(f):
 
         if 'x-access-token' in request.headers:
             token = request.headers['x-access-token']
-            print ("this is called")
         
         if not token:
-            return jsonify({'message': 'Token is invalid!'}), 401
+            return jsonify({'message': 'Token is not present!'}), 401
 
         try:
-            data = jwt.decode(token, secret_key)
+            data = jwt.decode(token, secret_key, algorithms='HS256')
             current_user = User.query.filter_by(public_id=data['public_id']).first()
         except:
             return jsonify({'message':'Token is invalid!'}), 403
@@ -41,9 +40,12 @@ def empty_if_none(t):
         return ""
     return t
 
-def check_for_user(request_data):
-    
-    return User.query.filter_by(username=request_data['username']).first()
+def check_for_user(param, value):
+
+    return User.query.filter(getattr(User, param)==value).first()
+
+def check_for_spell(param, value):
+    return Spell.query.filter(getattr(Spell, param)==value).first()
 
 
 
@@ -61,7 +63,7 @@ def register_user(request):
     public_id = generate_uuid()
 
 
-    user = check_for_user(request_data) 
+    user = check_for_user('User','username',username) 
 
     try:
         helpers.assert_null(len(username.strip()) > 0, message="Null Check")
@@ -107,15 +109,41 @@ def login_user(request):
         print ("Dont put empty stuff Man!!")
         return "Null", 400
 
-    user = check_for_user(request_data)
+    user = check_for_user('username', username)
 
     if not user:
         return "Could not find User", 401
     
-    print (password)
     if check_password_hash(user.password, password):
         token = jwt.encode({'public_id':user.public_id, 'exp':datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, os.environ['SECRET_KEY'])
         return token, 200 
 
     return "Could not verify the user", 403
+
+
+
+def register_booking(current_user, request):
+    print (current_user.username)
+
+    bookee_public_id = request.form.get('public_id') 
+
+    bookee = check_for_user('public_id', bookee_public_id)
+
+    bookee_spell = ""
+    if bookee:
+        print ('bookee')
+        bookee_spell = check_for_spell('user_id', bookee.id)
+        if bookee_spell:
+
+            spell_id = bookee_spell.id
+            user_id = current_user.id
+            time = datetime.datetime.utcnow() + datetime.timedelta(days=1)
+            cost = bookee_spell.price
+            status = "booked"
+
+            book = BookingDetails(spell_id=spell_id, user_id=user_id, time=time,cost=cost,status=status)
+            db.session.add(book)
+            db.session.commit()
+
+    return 0,0
     
