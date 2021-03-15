@@ -1,4 +1,5 @@
 from flask import Flask, request
+import os
 from flask_cors import CORS
 from models import db, config
 import json
@@ -13,6 +14,7 @@ def initialize_database(app):
 
 def create_app():
 	app = Flask(__name__)
+	app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 	CORS(app)
 	initialize_database(app)
 

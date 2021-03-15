@@ -9,3 +9,5 @@ junk/*
 *#
 .vscode/*
 .idea/*
+
+tt.env
