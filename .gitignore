@@ -11,3 +11,4 @@ junk/*
 .idea/*
 
 tt.env
+migrations
