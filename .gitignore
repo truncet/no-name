@@ -12,3 +12,4 @@ junk/*
 
 tt.env
 migrations
+.env
