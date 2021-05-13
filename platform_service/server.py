@@ -1,24 +1,26 @@
-from flask import Flask, request
 import os
+from flask import Flask
 from flask_cors import CORS
-from models import db, config
-import json
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from .config import Config
 
 
-
-def initialize_database(app):
-	app.config['SQLALCHEMY_DATABASE_URI'] = config.DATABASE_URL
-	app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-	db.init_app(app)
+db = SQLAlchemy(session_options={'autocommit': False, 'autoflush': True})
+migrate = Migrate()
 
 
-def create_app():
+def create_app(config_class=Config):
 	app = Flask(__name__)
-	app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 	CORS(app)
-	initialize_database(app)
+	app.config.from_object(Config)
+	db.init_app(app)
+	migrate.init_app(app, db)
 
-	from authorize_service.routes import users
-	app.register_blueprint(users)
+	from users_module import users as users_blueprint
+	app.register_blueprint(users_blueprint, url_prefix='/user')
+
+	from roles_module import roles as roles_blueprint
+	app.register_blueprint(roles_blueprint, url_prefix='/role')
 
 	return app

@@ -1,12 +1,7 @@
-from  flask import render_template, Blueprint, request, jsonify, redirect, url_for
-#from .state_machines import token_required, register_user, login_user, register_booking
-from .state_machines import token_required, check_register_user, show_user_profile, complete_user_profile
-import json
-from flask_cors import CORS, cross_origin
-
-
-users = Blueprint('users', __name__)
-
+from  flask import request, jsonify
+from . import state_machine as usm
+from platform_service import authorize
+from users_module import users
 
 # @users.route('/user', methods=['GET'])
 # @token_required
@@ -49,26 +44,27 @@ users = Blueprint('users', __name__)
 #     return jsonify({'message':result}), code
 
 
-@users.route('/user', methods=['POST'])
-@token_required
+@users.route('/', methods=['POST'])
+@authorize.authorize
 def register_user(current_user):
     print (current_user)
-    res, code= check_register_user(current_user)
-    return res
+    res, code= usm.check_register_user(current_user)
+    return res, code
 
 
 @users.route('/user/profiles' , methods=['GET'])
-@token_required
+@authorize.authorize
 def show_profile(current_user):
-    res, code =  show_user_profile(current_user)
-    return res
+    print("Current user: ", current_user)
+    res, code =  usm.show_user_profile(current_user)
+    return res, code
 
 
 
 @users.route('/user/profile', methods=['PUT'])
-@token_required
+@authorize.authorize
 def complete_profile(current_user):
-    res,code = complete_user_profile(current_user) 
+    res,code = usm.complete_user_profile(current_user) 
     return res
 
 @users.route('/home', methods=['GET'])

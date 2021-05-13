@@ -1,7 +1,8 @@
-from flask_migrate import Migrate, MigrateCommand
-
-from models import db
 from platform_service import server
+from models import User
 
 app = server.create_app() 
-migrate = Migrate(app, db)
+
+@app.shell_context_processor
+def make_shell_context():
+    return {'db': server.db, 'User': User}
