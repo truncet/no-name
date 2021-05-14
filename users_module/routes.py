@@ -52,7 +52,7 @@ def register_user(current_user):
     return res, code
 
 
-@users.route('/user/profiles' , methods=['GET'])
+@users.route('/profiles' , methods=['GET'])
 @authorize.authorize
 def show_profile(current_user):
     print("Current user: ", current_user)
@@ -61,7 +61,7 @@ def show_profile(current_user):
 
 
 
-@users.route('/user/profile', methods=['PUT'])
+@users.route('/profile', methods=['PUT'])
 @authorize.authorize
 def complete_profile(current_user):
     res,code = usm.complete_user_profile(current_user) 
@@ -69,5 +69,5 @@ def complete_profile(current_user):
 
 @users.route('/home', methods=['GET'])
 def home_page():
-    return jsonify({'message':'this seems to be home page'})
+    return jsonify({'message':'this seems to be user home page'})
     

@@ -17,7 +17,11 @@ def check_register_user(current_user):
     if not user:
         public_id = current_user.get('user_id')
         email = current_user.get('firebase').get('identities').get('email')
-        role_id = request.form.get('role_id')
+        role = request.json.get('role')
+        if role=="worker":
+            role_id = 0
+        elif role=="searcher":
+            role_id = 1
 
         new_user = User(public_id=public_id, email=email, role_id=role_id)
         db.session.add(new_user)
