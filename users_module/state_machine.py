@@ -7,8 +7,31 @@ def show_user_profile(current_user):
     return jsonify({"message": "Shown user profile"}), 200
 
 def complete_user_profile(current_user):
-    print ("I am here")
-    return 1
+    user_id = current_user.get('user_id')
+    userExist = utils.check_if_user("public_id", user_id)
+
+    if not userExist:
+        error_msg = "This user is not registered. Signup again"
+        return jsonify({"message":error_msg}), 403
+    else:
+        try:
+            user_name = request.json.get('userName')
+            age = request.json.get('age')
+            profession = request.json.get('profession')
+            location = request.json.get('location')
+            number = request.json.get('number')
+
+            user = User.query.filter_by(public_id=user_id).first()
+            user.username = user_name
+            user.age = age
+            user.profession = profession
+            user.location = location
+            user.phone = number
+
+            db.session.commit()
+            return jsonify({"message":"Database updated"}), 200
+        except:
+            return jsonify({"message":"Could not update the db"}), 500
 
 def check_register_user(current_user):
     user_id = current_user.get('user_id')
