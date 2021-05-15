@@ -3,6 +3,9 @@ from platform_service.server import db
 from libs import utils, helpers
 from models import User
 
+def get(id):
+    user = utils.find_by_parameters(id=id)
+    return user[0] if len(user) > 0 else None
 
 def get_by_public_id(user_id):
     user = utils.find_by_parameters(public_id=user_id)
@@ -13,9 +16,26 @@ def show_user_profile(current_user):
     user = get_by_public_id(user_id)
     return user
 
-def complete_user_profile(current_user):
-    print ("I am here")
-    return 1
+def complete_user_profile(current_user, user):
+    user_id = current_user.get('user_id')
+    old_user = get_by_public_id(user_id)[0]
+    helpers.assert_found(old_user, "User doesn't exist.")
+    old_user_id = getattr(old_user, 'id')
+    update_with_coalesce = ['age', 'profession']
+    update_without_coalesce = ['username', 'location', 'phone']
+
+    for key in update_with_coalesce:
+        value = getattr(user, key)
+        print(f"Value for key {key} in user: {value}")
+        if value:
+            setattr(old_user, key, value)
+    
+    for key in update_without_coalesce:
+        value = getattr(user, key)
+        setattr(old_user, key, value)
+    
+    db.session.commit()
+    return get(old_user_id), 200
 
 def check_register_user(current_user):
     user_id = current_user.get('user_id')

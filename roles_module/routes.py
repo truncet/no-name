@@ -9,9 +9,7 @@ from roles_module import roles
 def create_role(current_user):
     print (current_user)
 
-    role_name = request.json['role_name']
-
-    print("Role Name:",role_name)
+    role_name = request.json.get('role_name')
     
     res, code= rsm.create_role(role_name)
     return res, code

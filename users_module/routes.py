@@ -1,6 +1,6 @@
 from  flask import request, jsonify
 from . import state_machine as usm
-from platform_service import authorize
+from platform_service import authorize, serializers
 from users_module import users
 from libs import helpers
 
@@ -62,11 +62,15 @@ def show_profile(current_user):
 
 
 
-@users.route('/user/profile', methods=['PUT'])
+@users.route('/profile', methods=['PUT'])
 @authorize.authorize
 def complete_profile(current_user):
-    res,code = usm.complete_user_profile(current_user) 
-    return res
+    payload = serializers.deserialize(request.json)
+    helpers.assert_true(payload.username!=None, "Invalid username")
+    helpers.assert_true(payload.location!=None, "Invalid location")
+    helpers.assert_true(payload.phone!=None, "Invalid phone")
+    res,code = usm.complete_user_profile(current_user, payload) 
+    return helpers.respond(res,code)
 
 @users.route('/home', methods=['GET'])
 def home_page():
