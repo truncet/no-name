@@ -1,10 +1,17 @@
 from flask import jsonify, request, redirect, url_for
 from platform_service.server import db
-from libs import utils
+from libs import utils, helpers
 from models import User
 
+
+def get_by_public_id(user_id):
+    user = utils.find_by_parameters(public_id=user_id)
+    return user
+
 def show_user_profile(current_user):
-    return jsonify({"message": "Shown user profile"}), 200
+    user_id = current_user.get('user_id')
+    user = get_by_public_id(user_id)
+    return user
 
 def complete_user_profile(current_user):
     print ("I am here")
@@ -13,7 +20,7 @@ def complete_user_profile(current_user):
 def check_register_user(current_user):
     user_id = current_user.get('user_id')
 
-    user = utils.check_if_user("public_id", user_id)
+    user = get_by_public_id(user_id)
     if not user:
         public_id = current_user.get('user_id')
         email = current_user.get('firebase').get('identities').get('email')

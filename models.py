@@ -12,6 +12,9 @@ class User(db.Model):
     location = db.Column(db.String(500))
     phone = db.Column(db.String(50), unique=True )
 
+    def serialize(self):
+        return self.__dict__
+
     def __repr__(self):
         return "%s"%(self.__dict__)
     
@@ -27,11 +30,23 @@ class Spell(db.Model):
     price = db.Column(db.Integer)
     work_type = db.Column(db.String(100))
 
+    def serialize(self):
+        return self.__dict__
+
+    def __repr__(self):
+        return "%s"%(self.__dict__)
+
 
 class Role(db.Model):
     __tablename__ = "roles"
     id = db.Column(db.Integer, primary_key=True)
     role_name = db.Column(db.String(100))
+
+    def serialize(self):
+        return self.__dict__
+
+    def __repr__(self):
+        return "%s"%(self.__dict__)
 
 
 class BookingDetails(db.Model):
@@ -42,5 +57,11 @@ class BookingDetails(db.Model):
     time = db.Column(db.DateTime)
     cost = db.Column(db.Integer)
     status = db.Column(db.String)
+
+    def serialize(self):
+        return self.__dict__
+
+    def __repr__(self):
+        return "%s"%(self.__dict__)
 
 
