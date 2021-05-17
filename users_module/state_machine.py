@@ -37,14 +37,20 @@ def complete_user_profile(current_user, user):
     db.session.commit()
     return get(old_user_id), 200
 
+
 def check_register_user(current_user):
-    user_id = current_user.get('user_id')
+    public_id = current_user.get('user_id')
 
     user = get_by_public_id(user_id)
+
     if not user:
-        public_id = current_user.get('user_id')
-        email = current_user.get('firebase').get('identities').get('email')
-        role_id = request.form.get('role_id')
+        email = current_user.get('firebase').get('identities').get('email')[0]
+        print (email)
+        role = request.json.get('role')
+        if role=="worker":
+            role_id = 1
+        elif role=="searcher":
+            role_id = 2
 
         new_user = User(public_id=public_id, email=email, role_id=role_id)
         db.session.add(new_user)

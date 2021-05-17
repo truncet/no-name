@@ -14,7 +14,11 @@
     POSTGRES_SERVICE_HOST=<your_db_host>
     POSTGRES_SERVICE_PORT=<your_db_port>
     DB_NAME=<your_db_name>```
+- now If you are initializing db for first time, run `flask db init`
+- To create migrations for new or changed models, run `flask db migrate`
 - now inside the `no-name` directory run `flask db upgrade`
 
+
 ## Running the application in local
+- set the environment variable, FLASK_APP to "manage.py"
 - inside `no-name` directory run `flask run`

@@ -53,6 +53,7 @@ def register_user(current_user):
     return res, code
 
 
+
 @users.route('/profile' , methods=['GET'])
 @authorize.authorize
 def show_profile(current_user):
@@ -69,10 +70,12 @@ def complete_profile(current_user):
     helpers.assert_true(payload.username!=None, "Invalid username")
     helpers.assert_true(payload.location!=None, "Invalid location")
     helpers.assert_true(payload.phone!=None, "Invalid phone")
+
     res,code = usm.complete_user_profile(current_user, payload) 
     return helpers.respond(res,code)
 
+
 @users.route('/home', methods=['GET'])
 def home_page():
-    return jsonify({'message':'this seems to be home page'})
+    return jsonify({'message':'this seems to be user home page'})
     
