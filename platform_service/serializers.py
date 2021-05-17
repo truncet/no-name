@@ -55,3 +55,4 @@ class ComplexEncoder(json.JSONEncoder):
 
 def serialize(instance):
     return json.dumps(instance, cls=ComplexEncoder)
+

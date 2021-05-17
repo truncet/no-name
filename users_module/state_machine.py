@@ -1,49 +1,48 @@
 from flask import jsonify, request, redirect, url_for
 from platform_service.server import db
-from libs import utils
+from libs import utils, helpers
 from models import User
 
+def get(id):
+    user = utils.find_by_parameters(id=id)
+    return user[0] if len(user) > 0 else None
+
+def get_by_public_id(user_id):
+    user = utils.find_by_parameters(public_id=user_id)
+    return user
+
 def show_user_profile(current_user):
-    public_id = current_user.get('user_id')
-
-    user = User.query.filter_by(public_id=public_id).first()
-    if not user:
-        return jsonify({"message":"Could not find this User"})
-    else:
-        pass
-        
-    return jsonify({"message": "Shown user profile"}), 200
-
-def complete_user_profile(current_user):
     user_id = current_user.get('user_id')
-    user = User.query.filter_by(public_id=user_id).first()
+    user = get_by_public_id(user_id)
+    return user
 
-    if not user:
-        error_msg = "This user is not registered. Signup again"
-        return jsonify({"message":error_msg}), 403
-    else:
-        try:
-            user_name = request.json.get('userName')
-            age = request.json.get('age')
-            profession = request.json.get('profession')
-            location = request.json.get('location')
-            number = request.json.get('number')
+def complete_user_profile(current_user, user):
+    user_id = current_user.get('user_id')
+    old_user = get_by_public_id(user_id)[0]
+    helpers.assert_found(old_user, "User doesn't exist.")
+    old_user_id = getattr(old_user, 'id')
+    update_with_coalesce = ['age', 'profession']
+    update_without_coalesce = ['username', 'location', 'phone']
 
-            user.username = user_name
-            user.age = age
-            user.profession = profession
-            user.location = location
-            user.phone = number
+    for key in update_with_coalesce:
+        value = getattr(user, key)
+        print(f"Value for key {key} in user: {value}")
+        if value:
+            setattr(old_user, key, value)
+    
+    for key in update_without_coalesce:
+        value = getattr(user, key)
+        setattr(old_user, key, value)
+    
+    db.session.commit()
+    return get(old_user_id), 200
 
-            db.session.commit()
-            return jsonify({"message":"Database updated"}), 200
-        except:
-            return jsonify({"message":"Could not update the db"}), 500
 
 def check_register_user(current_user):
     public_id = current_user.get('user_id')
 
-    user = utils.check_if_user("public_id", public_id)
+    user = get_by_public_id(user_id)
+
     if not user:
         email = current_user.get('firebase').get('identities').get('email')[0]
         print (email)

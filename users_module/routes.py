@@ -53,13 +53,13 @@ def register_user(current_user):
     return res, code
 
 
-@users.route('/profiles' , methods=['GET'])
+
+@users.route('/profile' , methods=['GET'])
 @authorize.authorize
 def show_profile(current_user):
-    print("Current user: ", current_user)
-    res, code =  usm.show_user_profile(current_user)
+    res =  usm.show_user_profile(current_user)
     helpers.assert_found(res, message="User doesn't exist.")
-    return helpers.responsd(res, 200)
+    return helpers.respond(res, 200)
 
 
 
@@ -70,8 +70,10 @@ def complete_profile(current_user):
     helpers.assert_true(payload.username!=None, "Invalid username")
     helpers.assert_true(payload.location!=None, "Invalid location")
     helpers.assert_true(payload.phone!=None, "Invalid phone")
-    res,code = usm.complete_user_profile(current_user) 
-    return helpers.respond(res, code)
+
+    res,code = usm.complete_user_profile(current_user, payload) 
+    return helpers.respond(res,code)
+
 
 @users.route('/home', methods=['GET'])
 def home_page():
