@@ -19,7 +19,7 @@ class User(db.Model):
     def __getitem__(self, item):
         return getattr(self, item)
     
-    def seriazlize(self):
+    def serialize(self):
         return self.__dict__
         
 
@@ -31,7 +31,7 @@ class Spell(db.Model):
     price = db.Column(db.Integer)
     work_type = db.Column(db.String(100))
 
-    def seriazlize(self):
+    def seriaize(self):
         return self.__dict__
 
     def __repr__(self):
@@ -43,7 +43,7 @@ class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     role_name = db.Column(db.String(100))
 
-    def seriazlize(self):
+    def serialize(self):
         return self.__dict__
 
     def __repr__(self):
@@ -60,7 +60,7 @@ class BookingDetails(db.Model):
     status = db.Column(db.String)
 
 
-    def seriazlize(self):
+    def serialize(self):
         return self.__dict__
 
     def __repr__(self):
