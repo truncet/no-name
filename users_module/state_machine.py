@@ -41,7 +41,7 @@ def complete_user_profile(current_user, user):
 def check_register_user(current_user):
     public_id = current_user.get('user_id')
 
-    user = get_by_public_id(user_id)
+    user = get_by_public_id(public_id)
 
     if not user:
         email = current_user.get('firebase').get('identities').get('email')[0]
