@@ -3,6 +3,7 @@ from platform_service.server import db
 from libs import utils, helpers
 from models import User
 
+
 def get(id):
     user = utils.find_by_parameters(id=id)
     return user[0] if len(user) > 0 else None
@@ -22,7 +23,7 @@ def complete_user_profile(current_user, user):
     helpers.assert_found(old_user, "User doesn't exist.")
     old_user_id = getattr(old_user, 'id')
     update_with_coalesce = ['age', 'profession']
-    update_without_coalesce = ['username', 'location', 'phone']
+    update_without_coalesce = ['userName', 'location', 'phone']
 
     for key in update_with_coalesce:
         value = getattr(user, key)
@@ -33,8 +34,11 @@ def complete_user_profile(current_user, user):
     for key in update_without_coalesce:
         value = getattr(user, key)
         setattr(old_user, key, value)
-    
+
+    setattr(old_user, 'profile_completed',old_user.is_complete())
+
     db.session.commit()
+
     return get(old_user_id), 200
 
 
