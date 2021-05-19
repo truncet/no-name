@@ -23,4 +23,10 @@ def create_app(config_class=Config):
 	from roles_module import roles as roles_blueprint
 	app.register_blueprint(roles_blueprint, url_prefix='/role')
 
+	from services_module import services as services_blueprint
+	app.register_blueprint(services_blueprint, url_prefix='/service')
+
+	from bookings_module import bookings as bookings_blueprint
+	app.register_blueprint(bookings_blueprint, url_prefix='/booking')
+
 	return app
