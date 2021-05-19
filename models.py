@@ -26,8 +26,8 @@ class User(db.Model):
         return self.__dict__
         
 
-class Spell(db.Model):
-    __tablename__ = "spells"
+class Service(db.Model):
+    __tablename__ = "services"
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     name = db.Column(db.String(255))
@@ -57,7 +57,7 @@ class Role(db.Model):
 class BookingDetails(db.Model):
     __tablename__ = "booking_details"
     id = db.Column(db.Integer, primary_key=True)
-    spell_id = db.Column(db.Integer, db.ForeignKey('spells.id'), nullable=False)
+    service_id = db.Column(db.Integer, db.ForeignKey('services.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'),nullable=False )
     time = db.Column(db.DateTime)
     cost = db.Column(db.Integer)
