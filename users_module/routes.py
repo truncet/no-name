@@ -48,7 +48,6 @@ from libs import helpers
 @users.route('/', methods=['POST'])
 @authorize.authorize
 def register_user(current_user):
-    print (current_user)
     res, code= usm.check_register_user(current_user)
     return res, code
 
@@ -70,7 +69,7 @@ def complete_profile(current_user):
     helpers.assert_true(payload.username!=None, "Invalid username")
     helpers.assert_true(payload.location!=None, "Invalid location")
     helpers.assert_true(payload.phone!=None, "Invalid phone")
-
+    print ('go to function')
     res,code = usm.complete_user_profile(current_user, payload) 
     return helpers.respond(res,code)
 

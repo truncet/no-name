@@ -9,6 +9,8 @@ def get(id):
 
 def get_by_public_id(user_id):
     user = utils.find_by_parameters(public_id=user_id)
+    if user:
+        return user[0]
     return user
 
 def show_user_profile(current_user):
@@ -18,7 +20,8 @@ def show_user_profile(current_user):
 
 def complete_user_profile(current_user, user):
     user_id = current_user.get('user_id')
-    old_user = get_by_public_id(user_id)[0]
+    old_user = get_by_public_id(user_id)
+
     helpers.assert_found(old_user, "User doesn't exist.")
     old_user_id = getattr(old_user, 'id')
     update_with_coalesce = ['age', 'profession']
@@ -33,6 +36,8 @@ def complete_user_profile(current_user, user):
     for key in update_without_coalesce:
         value = getattr(user, key)
         setattr(old_user, key, value)
+    
+    setattr(old_user, 'profile_completed', old_user.is_complete())
     
     db.session.commit()
     return get(old_user_id), 200
