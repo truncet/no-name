@@ -13,8 +13,6 @@ class User(db.Model):
     phone = db.Column(db.String(50), unique=True )
     profile_completed = db.Column(db.Boolean, default=False, nullable=False)
 
-    def serialize(self):
-        return self.__dict__
 
     def __repr__(self):
         return "%s"%(self.__dict__)
@@ -24,6 +22,9 @@ class User(db.Model):
     
     def serialize(self):
         return self.__dict__
+    
+    def is_complete(self):
+        return  not (self.username == None or self.age== None or self.profession == None or self.location == None or self.phone == None)
         
 
 class Service(db.Model):
@@ -62,13 +63,6 @@ class BookingDetails(db.Model):
     time = db.Column(db.DateTime)
     cost = db.Column(db.Integer)
     status = db.Column(db.String)
-
-    def serialize(self):
-        return self.__dict__
-
-    def __repr__(self):
-        return "%s"%(self.__dict__)
-
 
     def serialize(self):
         return self.__dict__
