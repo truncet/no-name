@@ -1,3 +1,4 @@
+from sqlalchemy.orm import backref, relation, relationship
 from platform_service.server import db
 
 class User(db.Model):
@@ -32,8 +33,9 @@ class Service(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     name = db.Column(db.String(255))
-    price = db.Column(db.Integer)
-    work_type = db.Column(db.String(100))
+    price = db.Column(db.Numeric(precision=3))
+    work_type = db.Column(db.String(99))
+    user = relationship("User", backref="user")
 
 
     def serialize(self):
