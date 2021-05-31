@@ -22,11 +22,11 @@ def create(payload):
         user_id = user.id
         current_time = time.time()
         status = "scheduled"
-        new_booking = BookingDetails(service_id=sId, user_id=user_id, time=current_time, status=status,cost=price)
+        new_booking = BookingDetails(
+            service_id=sId, user_id=user_id, time=current_time, status=status, cost=price)
         db.session.add(new_booking)
         db.session.commit()
         return jsonify({'message': 'Successfully created Booking'}), 200
-
 
 
 def getall():
