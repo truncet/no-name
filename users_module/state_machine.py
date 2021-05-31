@@ -7,7 +7,7 @@ def get(id):
     user = utils.find_by_parameters(id=id)
     return user[0] if len(user) > 0 else None
 
-def get_by_public_id(user_id):
+def get_by_params(user_id):
     user = utils.find_by_parameters(public_id=user_id)
     if user:
         return user[0]
@@ -15,12 +15,12 @@ def get_by_public_id(user_id):
 
 def show_user_profile(current_user):
     user_id = current_user.get('user_id')
-    user = get_by_public_id(user_id)
+    user = get_by_params(user_id)
     return user
 
 def complete_user_profile(current_user, user):
     user_id = current_user.get('user_id')
-    old_user = get_by_public_id(user_id)
+    old_user = get_by_params(user_id)
 
     helpers.assert_found(old_user, "User doesn't exist.")
     old_user_id = getattr(old_user, 'id')
@@ -46,7 +46,7 @@ def complete_user_profile(current_user, user):
 def check_register_user(current_user):
     public_id = current_user.get('user_id')
 
-    user = get_by_public_id(public_id)
+    user = get_by_params(public_id)
 
     if not user:
         email = current_user.get('firebase').get('identities').get('email')[0]

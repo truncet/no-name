@@ -7,7 +7,7 @@ from .config import Config
 
 
 db = SQLAlchemy(session_options={'autocommit': False, 'autoflush': True})
-migrate = Migrate()
+migrate = Migrate(compare_type=True)
 
 
 def create_app(config_class=Config):

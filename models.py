@@ -62,8 +62,8 @@ class BookingDetails(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     service_id = db.Column(db.Integer, db.ForeignKey('services.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'),nullable=False )
-    time = db.Column(db.DateTime)
-    cost = db.Column(db.Integer)
+    time = db.Column(db.String)
+    cost = db.Column(db.Numeric(precision=3))
     status = db.Column(db.String)
 
     def serialize(self):
