@@ -33,7 +33,7 @@ class Service(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     name = db.Column(db.String(255))
-    price = db.Column(db.Numeric(precision=3))
+    price = db.Column(db.String)
     work_type = db.Column(db.String(99))
     user = relationship("User", backref="user")
 
@@ -63,7 +63,7 @@ class BookingDetails(db.Model):
     service_id = db.Column(db.Integer, db.ForeignKey('services.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'),nullable=False )
     time = db.Column(db.String)
-    cost = db.Column(db.Numeric(precision=3))
+    cost = db.Column(db.String)
     status = db.Column(db.String)
 
     def serialize(self):

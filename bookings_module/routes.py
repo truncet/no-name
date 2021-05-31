@@ -24,4 +24,4 @@ def get_bookings(current_user):
         res, code = bsm.getall()
     except:
         pass
-    return res, code
+    return helpers.respond(res, code)

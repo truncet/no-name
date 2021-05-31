@@ -30,4 +30,5 @@ def create(payload):
 
 
 def getall():
+    return BookingDetails.query.all(), 200
     return jsonify({'message': 'Successfully sent Booking'}), 200
