@@ -14,8 +14,10 @@ def create_bookings(current_user):
     helpers.assert_true(payload.sId != None, "Invalid id")
     helpers.assert_true(payload.uId != None, "Invalid userId")
     helpers.assert_true(payload.price != None, "Invalid price")
-    helpers.assert_true(payload.datetime != None, "Invalid ")
+    helpers.assert_true(payload.date != None, "Invalid ")
     helpers.assert_true(payload.bookid != None, "Invalid price")
+    helpers.assert_true(payload.hours != None, "Invalid price")
+    helpers.assert_true(payload.status != None, "Invalid Status")
     res, code = bsm.create(payload)
     return res, code
 
