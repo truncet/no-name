@@ -10,3 +10,7 @@ def create_role(role_name):
     #db.session.add(role)
     #db.session.commit()
     return jsonify({"message": "Role Added successfully."}), 200
+
+
+def get_roles():
+     return Role.query.distinct(Role.role_name).all()
