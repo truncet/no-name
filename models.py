@@ -50,7 +50,9 @@ class Role(db.Model):
     role_name = db.Column(db.String(100))
 
     def serialize(self):
-        return self.__dict__
+        response = self.__dict__
+        del response['_sa_instance_state']
+        return response
 
     def __repr__(self):
         return "%s" % (self.__dict__)
