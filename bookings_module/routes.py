@@ -26,8 +26,5 @@ def create_bookings(current_user):
 @authorize.authorize
 def get_bookings(current_user):
     res, code = jsonify({"message": "failed"}), 400
-    try:
-        res, code = bsm.getall()
-    except:
-        pass
-    return helpers.respond(res, code)
+    res, code = bsm.getall(current_user)
+    return res, code

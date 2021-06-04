@@ -35,7 +35,7 @@ class Service(db.Model):
     name = db.Column(db.String(255))
     price = db.Column(db.String)
     work_type = db.Column(db.String(99))
-    user = relationship("User", backref="user")
+    user = relationship("User", backref="user", lazy="joined")
 
     def serialize(self):
         return self.__dict__
@@ -68,6 +68,7 @@ class BookingDetails(db.Model):
     hours = db.Column(db.Integer)
     cost = db.Column(db.String)
     status = db.Column(db.String)
+    service = relationship("Service", backref="service", lazy="joined")
 
     def serialize(self):
         return self.__dict__
